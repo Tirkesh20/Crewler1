@@ -28,11 +28,11 @@ public class MainController {
     }
 
     @GetMapping("/")
-    public String main(Model model) throws IOException {
-        htmlService.search("https://en.wikipedia.org/wiki/Elon_Musk","Musk");
+    public String main(Model model) {
         try {
+            htmlService.search("https://en.wikipedia.org/wiki/Elon_Musk","Musk");
             printService.print();
-        }catch ( java.io.IOException e){
+        }catch ( java.io.IOException|IOException e ) {
             e.getMessage();
         }
         model.addAttribute("tasks", resultService.findAllResults());
