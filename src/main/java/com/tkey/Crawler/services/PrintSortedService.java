@@ -7,45 +7,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
 @Service
-public class PrintService implements CSVPrinter {
-
+public class PrintSortedService implements CSVPrinter {
     private final ResultService resultService;
 
     @Autowired
-    public PrintService(ResultService resultService) {
+    public PrintSortedService(ResultService resultService) {
         this.resultService = resultService;
     }
 
     @Override
     public void print() throws IOException {
-        List<Emergencies> list=resultService.findAllResults();
         Comparator<Emergencies> comparator = (p1, p2) -> (int) (p1.getCount() - p2.getCount());
-        File file=new File("test.csv");
-        if(!file.exists()) {
+        List<Emergencies> list = resultService.findAllResults();
+        File file = new File("sorted.csv");
+        if (!file.exists()) {
             file.createNewFile();
         }
+        list.sort(comparator);
+        List<Emergencies> sorted=list.stream().sorted(Comparator.comparingLong(Emergencies::getCount)).limit(10).collect(Collectors.toList());
         try (PrintWriter writer = new PrintWriter(file)) {
             StringBuilder sb = new StringBuilder();
             if (!list.isEmpty()) {
-                sb.append("Url ");
-                sb.append(" ,     ");
-                sb.append("hits");
-                sb.append('\n');
-                writer.write(sb.toString());
-                for (Emergencies o : list) {
-                    writer.write(o.getUrl() + "," + o.getCount() + '\n');
-                }
-                list.sort(comparator);
-                List<Emergencies> sorted=list.stream().limit(10).collect(Collectors.toList());
                 sb.append("Url ");
                 sb.append(" ,     ");
                 sb.append("hits");
@@ -55,8 +44,8 @@ public class PrintService implements CSVPrinter {
                     writer.write(o.getUrl() + "," + o.getCount() + '\n');
                 }
             }
-        }catch(FileNotFoundException e){
-            System.out.println(e.getMessage());
+        writer.write(sb.toString());
+
         }
     }
 }

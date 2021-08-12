@@ -18,17 +18,9 @@
 
 <main role="main" class="container">
 
-    <form action="/welcome" method="post">
-        <td> <input type="hidden"  name="command" value="login"  /> </td>
-        <table >
-            <tr>
-                <td>url</td>
-                <td> <input type="text" name="username" /> </td></tr>
-            <tr><td>Search Word</td>
-                <td> <input type="text" name="searchword"  /> </td></tr>
-            <tr><td>   <input type="submit" name="submit" value="login"  /> </td></tr>
-        </table>
-    </form>
+    <ol>
+        <li th:each="task : ${#messages}" th:text="${task}"></li>
+    </ol>
 
 </main>
 <!-- /.container -->

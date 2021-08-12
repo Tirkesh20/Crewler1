@@ -8,14 +8,14 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-public class Result implements Serializable {
+public class Emergencies implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private long count;
     private String url;
 
-    public Result() {
+    public Emergencies() {
 
     }
 
@@ -35,7 +35,7 @@ public class Result implements Serializable {
         this.url = url;
     }
 
-    public Result(long count, String url) {
+    public Emergencies(long count, String url) {
         this.count=count;
         this.url=url;
     }
@@ -44,8 +44,8 @@ public class Result implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Result result = (Result) o;
-        return count == result.count && Objects.equals(url, result.url);
+        Emergencies emergencies = (Emergencies) o;
+        return count == emergencies.count && Objects.equals(url, emergencies.url);
     }
 
     @Override

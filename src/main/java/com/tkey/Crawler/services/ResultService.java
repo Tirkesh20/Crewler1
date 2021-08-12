@@ -1,7 +1,7 @@
 package com.tkey.Crawler.services;
 
-import com.tkey.Crawler.model.Result;
-import com.tkey.Crawler.repository.ResultRepository;
+import com.tkey.Crawler.model.Emergencies;
+import com.tkey.Crawler.repository.EmergenciesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,23 +10,23 @@ import java.util.List;
 @Service
 public class ResultService {
 
-    private final ResultRepository repository;
+    private final EmergenciesRepository repository;
 
     @Autowired
-    public ResultService(ResultRepository repository) {
+    public ResultService(EmergenciesRepository repository) {
         this.repository = repository;
     }
 
 
-    public Result addSensor(Result sensor){
-        return repository.save(sensor);
+    public void addSensor(Emergencies sensor){
+        repository.save(sensor);
     }
 
-    public List<Result> findAllSensors(){
+    public List<Emergencies> findAllResults(){
         return repository.findAll();
     }
 
-    public Result update(Result sensor){
+    public Emergencies update(Emergencies sensor){
         return repository.save(sensor);
     }
 
