@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 public class HtmlService {
     private static final int MAX_DEPTH = 8;
     private final ResultService resultService;
-    private  final int MAX_VISITED_PAGES=300;
+    private  final int MAX_VISITED_PAGES=10000;
     private final Set<String> visited;
     private Document document;
     private final Queue<CrawlUrl> pagesToVisit;
@@ -40,7 +40,6 @@ public class HtmlService {
             while (!pagesToVisit.isEmpty()){
                 CrawlUrl currentUrl=  pagesToVisit.remove();
                     this.visited.add(currentUrl.url);
-
                     if (visited.size()>=MAX_VISITED_PAGES){
                     return true;
                 }

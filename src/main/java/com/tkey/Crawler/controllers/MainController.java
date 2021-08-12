@@ -29,7 +29,7 @@ public class MainController {
     @GetMapping("/")
     public String main(Model model) throws com.tkey.Crawler.exceptions.IOException {
         try {
-//            htmlService.search("https://en.wikipedia.org/wiki/Elon_Musk","Musk");
+            htmlService.search("https://en.wikipedia.org/wiki/Elon_Musk","Musk");
             printService.print();
         }catch (IOException e){
             e.getMessage();
