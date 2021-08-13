@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 public class HtmlService {
     private static final int MAX_DEPTH = 8;
     private final ResultService resultService;
-    private  final int MAX_VISITED_PAGES=1000;
+    private  final int MAX_VISITED_PAGES=10000;
     private final Set<String> visited;
     private Document document;
     private final Queue<CrawlUrl> pagesToVisit;
@@ -32,7 +32,7 @@ public class HtmlService {
         this.visited = new HashSet<>();
     }
 
-    public void search(String crawlUrl, String searchWord)  {
+    public void search(String crawlUrl, String searchWord) throws com.tkey.Crawler.exceptions.IOException {
         pagesToVisit.add(new CrawlUrl(crawlUrl,0));
         try {
             while (!pagesToVisit.isEmpty()){
@@ -42,30 +42,31 @@ public class HtmlService {
                     System.out.println(pagesToVisit.size());
                     System.out.println(domainStorage.size());
                     if (visited.size()==MAX_VISITED_PAGES){
+                        System.out.println("end");
                     return;
                 }
                 document = Jsoup.connect(currentUrl.url).get();
                 Elements linksOnPage = document.select("a[href]");
                 long count=searchForWord(searchWord);
-//                if (count>0){
+                if (count>0){
                     resultService.addSensor(new Emergencies(count,currentUrl.url));
-//                }
+                }
                 System.out.println(currentUrl.url+" "+count+" "+currentUrl.depth);
                 String href;
-                if (currentUrl.depth<MAX_DEPTH&&visited.size()<MAX_VISITED_PAGES) {
-                    for (Element link : linksOnPage) {
-                        href=link.attr("abs:href");
-                        if (!isSubUrl(href)){
-                            if ( !visited.contains(href)&&!domainStorage.contains(href)) {
-                                 pagesToVisit.add(new CrawlUrl(href, currentUrl.depth + 1));
-                                 domainStorage.add(href);
-                            }
-                        }
-                    }
-                }
+                    if (currentUrl.depth<MAX_DEPTH||visited.size()<MAX_VISITED_PAGES) {
+                         for (Element link : linksOnPage) {
+                              href=link.attr("abs:href");
+                                if (!isSubUrl(href)){
+                                    if ( !visited.contains(href)&&!domainStorage.contains(href)) {
+                                    pagesToVisit.add(new CrawlUrl(href, currentUrl.depth + 1));
+                                    domainStorage.add(href);
+                                    }
+                                }
+                         }
+                     }
                 }
         } catch (IOException e) {
-            e.getMessage();
+            throw new com.tkey.Crawler.exceptions.IOException(e.getMessage());
         }
     }
 

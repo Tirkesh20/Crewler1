@@ -1,7 +1,7 @@
 package com.tkey.Crawler.services;
 
 import com.tkey.Crawler.model.Emergencies;
-import com.tkey.Crawler.model.comparator.CountComparator;
+
 import com.tkey.Crawler.model.interfaces.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,7 +27,7 @@ public class PrintService implements CSVPrinter {
     @Override
     public void print() throws IOException {
         List<Emergencies> list=resultService.findAllResults();
-        Comparator<Emergencies> comparator = (p1, p2) -> (int) (p1.getCount() - p2.getCount());
+        Comparator<Emergencies> comparator = (p1, p2) -> (int) ( p2.getCount() - p1.getCount());
         File file=new File("test.csv");
         if(!file.exists()) {
             file.createNewFile();
@@ -45,8 +44,8 @@ public class PrintService implements CSVPrinter {
                     writer.write(o.getUrl() + "," + o.getCount() + '\n');
                 }
                 list.sort(comparator);
-                List<Emergencies> sorted=list.stream().limit(10).collect(Collectors.toList());
-                sb.append("Url ");
+                List<Emergencies> sorted=list.stream().limit(12).collect(Collectors.toList());
+                sb.append("Top10 ");
                 sb.append(" ,     ");
                 sb.append("hits");
                 sb.append('\n');
