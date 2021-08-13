@@ -44,7 +44,7 @@ public class PrintService implements CSVPrinter {
                     writer.write(o.getUrl() + "," + o.getCount() + '\n');
                 }
                 list.sort(comparator);
-                List<Emergencies> sorted=list.stream().limit(12).collect(Collectors.toList());
+                List<Emergencies> sorted=list.stream().limit(10).collect(Collectors.toList());
                 sb.append("Top10 ");
                 sb.append(" ,     ");
                 sb.append("hits");

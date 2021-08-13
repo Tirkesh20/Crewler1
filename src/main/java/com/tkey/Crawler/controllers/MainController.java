@@ -10,8 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Controller
@@ -29,11 +27,11 @@ public class MainController {
     }
 
     @GetMapping("/")
-    public String main(Model model)  {
+    public String main(Model model) throws com.tkey.Crawler.exceptions.IOException {
         try {
-            htmlService.search("https://en.wikipedia.org/wiki/Elon_Musk","Musk");
+//            htmlService.search("https://en.wikipedia.org/wiki/Elon_Musk","Musk");
             printService.print();
-        }catch (IOException | com.tkey.Crawler.exceptions.IOException e){
+        }catch (IOException e){
             e.getMessage();
         }
         model.addAttribute("tasks", resultService.findAllResults());
@@ -42,11 +40,4 @@ public class MainController {
     }
 
 
-    // /hello?name=kotlin
-    @GetMapping ("/oo")
-    public String mainWithParam(HttpServletRequest request,
-                                HttpServletResponse response) {
-
-        return "welcome"; //view
-    }
 }
