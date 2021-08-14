@@ -44,7 +44,7 @@ public class HtmlService {
             while (!pagesToVisit.isEmpty()){
                 CrawlUrl currentUrl=  pagesToVisit.remove();
                 System.out.println(visited.size());
-                if (visited.size()>= max){
+                if (visited.size()>= max||currentUrl.depth>7){
                     return;
                 }
                     try {
@@ -53,21 +53,20 @@ public class HtmlService {
                     document = Jsoup.connect(currentUrl.url).timeout(0).ignoreHttpErrors(true).get();
                     Elements linksOnPage = document.select("a[href]");
                     long count=searchForWord(searchWord);
-                    if (count>0){
                         resultService.add(new Emergencies(count,currentUrl.url));
-                    }
                     String href;
                     if (currentUrl.depth<MAX_DEPTH||visited.size()< max) {
                         for (Element link : linksOnPage) {
                             href = link.attr("abs:href");
-                                 if (!isSubUrl(href)&&!visited.contains(href)) {
+                                 if (!isSubUrl(href)&&!visited.contains(href)&&href.contains("https")) {
                                      pagesToVisit.add(new CrawlUrl(href, currentUrl.depth + 1));
                                  }
                              }
                          }
                     }
                 } catch (IOException e) {
-                      throw new com.tkey.Crawler.exceptions.IOException(e.getMessage());
+                        System.out.println(currentUrl.url);
+                      e.getMessage();
                 }
 
            }

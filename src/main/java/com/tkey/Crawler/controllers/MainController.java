@@ -1,7 +1,6 @@
 package com.tkey.Crawler.controllers;
 
 
-import com.tkey.Crawler.exceptions.IOException;
 import com.tkey.Crawler.services.HtmlService;
 import com.tkey.Crawler.services.PrintService;
 import com.tkey.Crawler.services.ResultService;
@@ -12,7 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 
 @Controller
@@ -30,17 +29,17 @@ public class MainController {
     }
 
     @GetMapping("/")
-    public String main( Model model) {
-        String url= (String) model.getAttribute("");
+    public String main( Model model)  {
+        String url= (String) model.getAttribute("url");
+        String word=(String) model.getAttribute("searchword");
                     try {
                         htmlService.search("https://en.wikipedia.org/wiki/Elon_Musk","Musk");
-                        Thread.currentThread().join();
                         printService.print();
-                    } catch (IOException | java.io.IOException | InterruptedException e) {
+                    } catch (IOException | com.tkey.Crawler.exceptions.IOException e) {
                         e.printStackTrace();
                     }
         model.addAttribute("tasks", resultService.findAllResults());
-        return "welcome"; //view
+        return "results"; //view
     }
 
 

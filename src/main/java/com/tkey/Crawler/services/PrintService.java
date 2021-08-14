@@ -43,6 +43,8 @@ public class PrintService implements CSVPrinter {
                      sb.append("Url ");
                      sb.append(" ,     ");
                      sb.append("hits");
+                    sb.append(" ,     ");
+                    sb.append(" total");
                      sb.append('\n');
                      writer.write(sb.toString());
                     for (Emergencies o : list) {
@@ -60,7 +62,7 @@ public class PrintService implements CSVPrinter {
                     sb.append('\n');
                     writer.write(sb.toString());
                     for (Emergencies o : sorted) {
-                    writer.write(o.getUrl() + "," + o.getCount() + total+'\n');
+                    writer.write(o.getUrl() + "," + o.getCount() +"  "+ total+'\n');
                     }
                 }
             }catch(FileNotFoundException e){
