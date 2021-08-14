@@ -18,16 +18,12 @@ public class ResultService {
     }
 
 
-    public void addSensor(Emergencies sensor){
-        repository.save(sensor);
+    public void add(Emergencies emergencies){
+        repository.save(emergencies);
     }
 
     public List<Emergencies> findAllResults(){
         return repository.findAll();
-    }
-
-    public Emergencies update(Emergencies sensor){
-        return repository.save(sensor);
     }
 
 

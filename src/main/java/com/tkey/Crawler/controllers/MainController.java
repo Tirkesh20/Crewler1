@@ -6,11 +6,13 @@ import com.tkey.Crawler.services.HtmlService;
 import com.tkey.Crawler.services.PrintService;
 import com.tkey.Crawler.services.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import javax.servlet.http.HttpServletRequest;
 
 
 @Controller
@@ -28,13 +30,15 @@ public class MainController {
     }
 
     @GetMapping("/")
-    public String main(Model model) {
-        try {
-            htmlService.search("https://en.wikipedia.org/wiki/Elon_Musk","Musk");
-            printService.print();
-        }catch ( java.io.IOException|IOException e ) {
-            e.getMessage();
-        }
+    public String main( Model model) {
+        String url= (String) model.getAttribute("");
+                    try {
+                        htmlService.search("https://en.wikipedia.org/wiki/Elon_Musk","Musk");
+                        Thread.currentThread().join();
+                        printService.print();
+                    } catch (IOException | java.io.IOException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
         model.addAttribute("tasks", resultService.findAllResults());
         return "welcome"; //view
     }

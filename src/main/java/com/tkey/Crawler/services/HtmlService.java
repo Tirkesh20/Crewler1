@@ -18,13 +18,12 @@ import java.util.regex.Pattern;
 public class HtmlService {
     private static final int MAX_DEPTH = 8;
     private final ResultService resultService;
-    private  final int MAX_VISITED_PAGES=328;
     private final Set<String> visited;
     private Document document;
     private final Queue<CrawlUrl> pagesToVisit;
 
     @Autowired
-    public HtmlService(ResultService resultService, Set<String> domainStorage) {
+    public HtmlService(ResultService resultService) {
         this.resultService = resultService;
         this.pagesToVisit = new LinkedList<>();
         this.visited = new HashSet<>();
@@ -34,32 +33,31 @@ public class HtmlService {
      *
      * @param crawlUrl root url for searching
      * @param searchWord word that we are looking for in page
-     * @return if no exception returns false
-     * @throws com.tkey.Crawler.exceptions.IOException
      */
-    public boolean search(String crawlUrl, String searchWord) throws com.tkey.Crawler.exceptions.IOException {
+    public void search(String crawlUrl, String searchWord) throws com.tkey.Crawler.exceptions.IOException {
+        int max = 10000;
         if (pagesToVisit.isEmpty()){
             pagesToVisit.add(new CrawlUrl(crawlUrl,0));
         }
         System.out.println(visited.size());
-        try {
 
             while (!pagesToVisit.isEmpty()){
                 CrawlUrl currentUrl=  pagesToVisit.remove();
                 System.out.println(visited.size());
-                if (visited.size()>=MAX_VISITED_PAGES){
-                    return true ;
+                if (visited.size()>= max){
+                    return;
                 }
-                if (!visited.contains(currentUrl.url)){
+                    try {
+                    if (!visited.contains(currentUrl.url)){
                     this.visited.add(currentUrl.url);
                     document = Jsoup.connect(currentUrl.url).timeout(0).ignoreHttpErrors(true).get();
                     Elements linksOnPage = document.select("a[href]");
                     long count=searchForWord(searchWord);
                     if (count>0){
-                        resultService.addSensor(new Emergencies(count,currentUrl.url));
+                        resultService.add(new Emergencies(count,currentUrl.url));
                     }
                     String href;
-                    if (currentUrl.depth<MAX_DEPTH||visited.size()<MAX_VISITED_PAGES) {
+                    if (currentUrl.depth<MAX_DEPTH||visited.size()< max) {
                         for (Element link : linksOnPage) {
                             href = link.attr("abs:href");
                                  if (!isSubUrl(href)&&!visited.contains(href)) {
@@ -68,11 +66,11 @@ public class HtmlService {
                              }
                          }
                     }
+                } catch (IOException e) {
+                      throw new com.tkey.Crawler.exceptions.IOException(e.getMessage());
                 }
-        } catch (IOException e) {
-            throw new com.tkey.Crawler.exceptions.IOException(e.getMessage());
-        }
-        return false;
+
+           }
     }
 
     /**

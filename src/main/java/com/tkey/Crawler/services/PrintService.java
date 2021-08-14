@@ -50,13 +50,17 @@ public class PrintService implements CSVPrinter {
                     }
                      list.sort(comparator);
                     List<Emergencies> sorted=list.stream().limit(12).collect(Collectors.toList());
+
+                    long total=sorted.stream().mapToLong(Emergencies::getCount).sum();
                     sb.append("Top10 ");
                     sb.append(" ,  ");
                     sb.append("hits");
+                    sb.append(" ,  ");
+                    sb.append("total");
                     sb.append('\n');
                     writer.write(sb.toString());
                     for (Emergencies o : sorted) {
-                    writer.write(o.getUrl() + "," + o.getCount() + '\n');
+                    writer.write(o.getUrl() + "," + o.getCount() + total+'\n');
                     }
                 }
             }catch(FileNotFoundException e){
