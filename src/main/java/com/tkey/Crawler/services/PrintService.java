@@ -43,22 +43,18 @@ public class PrintService implements CSVPrinter {
                      sb.append("Url ");
                      sb.append(" ,     ");
                      sb.append("hits");
-                    sb.append(" ,     ");
-                    sb.append(" total");
                      sb.append('\n');
                      writer.write(sb.toString());
                     for (Emergencies o : list) {
                     writer.write(o.getUrl() + "," + o.getCount() + '\n');
                     }
                      list.sort(comparator);
-                    List<Emergencies> sorted=list.stream().limit(12).collect(Collectors.toList());
+                    List<Emergencies> sorted=list.stream().limit(10).collect(Collectors.toList());
 
                     long total=sorted.stream().mapToLong(Emergencies::getCount).sum();
                     sb.append("Top10 ");
                     sb.append(" ,  ");
-                    sb.append("hits");
-                    sb.append(" ,  ");
-                    sb.append("total");
+                    sb.append("hits total");
                     sb.append('\n');
                     writer.write(sb.toString());
                     for (Emergencies o : sorted) {
