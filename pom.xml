@@ -15,7 +15,7 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>15</java.version>
-		<bootstrap.version>4.2.1</bootstrap.version>
+		<bootstrap.version>4.3.1</bootstrap.version>
 	</properties>
 	<dependencies>
 		<dependency>
