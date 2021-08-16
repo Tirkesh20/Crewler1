@@ -1,6 +1,7 @@
 package com.tkey.Crawler.controllers;
 
 
+import com.tkey.Crawler.model.SearchTerm;
 import com.tkey.Crawler.services.HtmlService;
 import com.tkey.Crawler.services.PrintService;
 import com.tkey.Crawler.services.ResultService;
@@ -9,8 +10,10 @@ import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 
@@ -28,19 +31,32 @@ public class MainController {
         this.printService = printService;
     }
 
-    @GetMapping("/")
-    public String main( Model model)  {
-        String url= (String) model.getAttribute("url");
-        String word=(String) model.getAttribute("searchword");
+    @PostMapping("/")
+    public String main( SearchTerm searchTerm,Model model)  {
                     try {
-                        htmlService.search("https://en.wikipedia.org/wiki/Elon_Musk","Musk");
+                        htmlService.search(searchTerm.getUrl(),searchTerm.getWord());
                         printService.print();
                     } catch (IOException | com.tkey.Crawler.exceptions.IOException e) {
                         e.printStackTrace();
                     }
-        model.addAttribute("tasks", resultService.findAllResults());
+                    if (searchTerm.isTop10()){
+                        model.addAttribute("tasks", printService.sort());
+
+                    }else
+                        model.addAttribute("tasks", resultService.findAllResults());
+
         return "results"; //view
     }
 
+    @GetMapping("/search")
+     public  String smallRequest(Model model){
+        model.addAttribute("searchterm", new SearchTerm());
 
-}
+
+        return "welcome";
+    }
+
+
+    }
+
+
