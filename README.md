@@ -4,6 +4,8 @@ https://drive.google.com/drive/folders/1hSKIIEEoJ9tPycEflqVKgm3oOjtPPXeG?usp=sha
 
 
 Guide to run the app
+
+
 Open the programm and run it -> the default port is set to 8080 but u can change it in application.properties which is located in resources package
 go to http://localhost:8080/search and enter the terms of the search 
 wait for the result list to appear
